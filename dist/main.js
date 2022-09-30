@@ -1,0 +1,1 @@
+(()=>{"use strict";let o=(console.log("bar function exec"),3);console.log(o),[1,2,3].forEach((o=>console.log(o)))})();
