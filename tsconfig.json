@@ -1,0 +1,7 @@
+{
+  // 编译选项：https://www.tslang.cn/docs/handbook/compiler-options.html
+  "compilerOptions": {
+    "noImplicitAny": true,
+    "target": "ES5"
+  }
+}

@@ -1,3 +1,6 @@
-# Webpack 
+# Gulp 构建
 
-执行 `npm run build` 进行构建。
+``` bash
+npm i
+npm run build
+```
