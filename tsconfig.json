@@ -1,7 +1,17 @@
 {
   // 编译选项：https://www.tslang.cn/docs/handbook/compiler-options.html
   "compilerOptions": {
+    // 如果代码中有隐含的 any 类型，则编译会出错
     "noImplicitAny": true,
+    // 目标输出 ES5 标准，TypeScript 会自动生成 CommonJS 模块，可以不用指定 module 编译项
     "target": "ES5"
-  }
+  },
+  // 编译器包含的文件列表，可以使用 glob 匹配模式
+  "include": [
+    "src/**/*"
+  ],
+  // 编译器排除的编译列表
+  "exclude": [
+    "node_modules"
+  ]
 }
