@@ -123,7 +123,7 @@ const build = {
       //   │   │   └── a.ts
       //   │   └── C/
       //   │   		└── c.ts
-      //   ├── lib
+      //   ├── dist
       //   │   ├── package.json     # 新增包描述文件
       //   │   ├── add.js
       //   │   ├── a.js
