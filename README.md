@@ -1,6 +1,8 @@
-# Gulp 构建
+# ziyi-sdk-demo
 
-``` bash
-npm i
-npm run build
+使用方式
+
+``` javascript
+import { add } from 'ziyi-sdk-demo/add';
+add(1, 2);
 ```
