@@ -12,7 +12,6 @@ const program = new Command();
 program
   .version(version)
   // 使用 --no-flat 用于默认平铺，不传任何参数的情况下 opt.flat = true
-  // 这里也可以使用 --flat，这样构建命令必须传入 --flat 才能进行平铺
   .option("--no-flat", "不对构建目录进行平铺")
   .option("--outdir <outdir>", "构建目录");
 program.parse(process.argv);
@@ -38,19 +37,17 @@ const build = {
   },
 
   clear() {
-    fs_extra.emptyDirSync(opts.outdir);
+    fs_extra.emptyDirSync(this.distPath);
   },
 
   gulp() {
     // 构建参数
     // --outdir: 构建目录
     // --color: 构建时打印带颜色的日志
-
-    // shelljs 执行参数
-    // async: false => 构建同步执行
-    // fatal: true  => 构建失败则退出进程
     shell.exec(`gulp --outdir=${opts.outdir} --color`, {
+      // 构建同步执行
       async: false,
+      // 构建失败则退出进程
       fatal: true,
     });
   },
@@ -62,7 +59,7 @@ const build = {
     }
 
     // 同步获取构建目录下的所有文件
-    // files:  [
+    // 例如：files:  [
     //     'dist/A',
     //     'dist/A/a.js',
     //     'dist/A/B',
@@ -74,11 +71,10 @@ const build = {
     const files = glob.sync(`${this.distPath}/**/*.js`);
     const fileRepeatMap = {};
 
-    // 平铺目录需要确保不能产生同名文件，例如 dist/A/a.js 和 dist/B/a.js，会因为文件名冲突无法生成 dist/a.js
+    // 平铺目录需要确保不能产生同名文件，例如 dist/A/a.js 和 dist/B/a.js，会因为文件名冲突导致无法生成 dist/a.js
     files.forEach((file) => {
       // 将 dist/A/a.js 转化为 a.js
       const fileName = file.substring(file.lastIndexOf("/") + 1);
-      // { "a.js": [] }
       const fileRepeatArr = fileRepeatMap[fileName];
       // 存储 a.js 为文件名的文件路径数组，例如 { "a.js": ["dist/A/a.js"] }
       fileRepeatMap[fileName] = fileRepeatArr
@@ -116,9 +112,8 @@ const build = {
       // 其中 ? 的作用用于贪婪匹配中的 0 ~ 1 次, 从而阻止了 * 的 0 ~ n 次贪婪匹配
 
       // 平铺目录后需要将引入路径进行更改，因为平铺后目标文件的位置发送了变化，因此被引用的路径也需要改变
-      // 例如在 src/add.ts 中需要引入 A/a.ts，则需要使用 import { a } from './A/a'
-      // 使用 gulp 构建后，如果目录没有平铺，默认是 var a_1 = require("./A/a");
-      // 但是这里希望目录可以平铺，平铺之后的结构是 add.js 和 a.js 同级，因此希望将构建代码更改为 var a_1 = require("./a"); 需要去掉中间的目录路径 A
+      // 例如在 src/index.ts 中需要引入 A/a.ts，使用 gulp 构建后是 require("./A/a");
+      // 但是目录平铺之后 index.js 和 a.js 同级，因此希望将目标代码更改为 require("./a"); 需要去掉中间的目录路径 A
 
       //   ├── src
       //   │   ├── add.ts
@@ -135,13 +130,14 @@ const build = {
       //   │   ├── b.js
       //   │   ├── c.js
       //   │   ├── d.js
+      //   │   ├── index.js
 
       // 例如: require('./A/a') => require('./a')
       code = code.replace(/(?<=require\(")(.*?)(?="\))/g, (match) => {
         if (!match) {
           return match;
         }
-        // match: ./A/a
+        // 例如： match = './A/a'
         const paths = match.split("/");
         // 获取文件名
         const fileName = paths.concat().pop();
@@ -159,7 +155,7 @@ const build = {
 
       // TODO: 如果需要生成 sourcemap，则 sourcemap 的路径也需要处理
 
-      // 删除当前目录下的目标文件
+      // 删除当前目录下的目标文件，例如 dist/A/a.js
       fs.rmSync(file);
 
       // 将 dist/A/a.js 转化为 a.js
@@ -177,9 +173,9 @@ const build = {
 
     dirs.forEach((dir) => {
       const subdirs = fs.readdirSync(dir);
-      // 如果文件夹为空，则删除文件夹（注意由于从内到外进行删除，因为 A/B 的情况下先删除 B，然后再删除 A）
+      // 如果文件夹为空，则删除文件夹（注意从内到外进行删除，A/B 的情况下先删除 B 文件夹，再删除 A 文件夹）
       if (!subdirs?.length) {
-        fs_extra.rmdirSync(dir);
+        fs.rmdirSync(dir);
       }
     });
   },
