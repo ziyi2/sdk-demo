@@ -180,8 +180,12 @@ const build = {
     });
   },
 
+  // 在项目根目录下使用 package.json 进行 NPM 发布，项目的引入路径为 import xxx from 'ziyi-sdk-demo/${opts.outdir}/xxx'
+  // 如果将 package.json 拷贝到 opts.outdir 目录下并进入 opts.outdir 目录进行发布，则引入路径为 import xxx from 'ziyi-sdk-demo/xxx'
+  // 除此之外，天然解决了需要在 package.json 中配置 files 字段或者在项目目录中配置 .npmignore 的问题
   prepublish() {
     // 拷贝 package.json 到 opts.outdir 目录下
+    // TIPS: 可以去除一些开发者不需要感知的开发态信息，例如 scripts、devDependencies
     fs.copyFileSync(
       path.join(this.rootPath, "package.json"),
       path.join(this.distPath, "package.json")
