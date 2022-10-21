@@ -6,7 +6,7 @@
 npm i ziyi-sdk-demo --save
 ```
 
-使用
+使用111
 
 ``` javascript
 import { add } from 'ziyi-sdk-demo';
