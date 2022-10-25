@@ -17,7 +17,6 @@ program
   .option("--outdir <outdir>", "构建目录");
 program.parse(process.argv);
 const opts = program.opts();
-console.log('opts: ', opts)
 // 默认的构建目录为 dist
 opts.outdir = opts.outdir || "dist";
 
