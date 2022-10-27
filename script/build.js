@@ -1,29 +1,22 @@
-const { Command } = require("commander");
+
 const shell = require("shelljs");
 const glob = require("glob");
 const fs_extra = require("fs-extra");
 const fs = require("fs");
 const path = require("path");
-const { version } = require("../package.json");
 
-const program = new Command();
 
-// 使用方式：node script/build.js --outdir=dist --flat
-program
-  .version(version)
-  // 使用 --no-flat 用于默认平铺，不传任何参数的情况下 opt.flat = true
-  .option("--no-flat", "不对构建目录进行平铺")
-  .option("--outdir <outdir>", "构建目录");
-program.parse(process.argv);
-const opts = program.opts();
-// 默认的构建目录为 dist
-opts.outdir = opts.outdir || "dist";
+// package.json 中的 config 参数：https://docs.npmjs.com/cli/v8/configuring-npm/package-json#config
+// 思考一下，如果要和 puiblish.js 中的参数获取形成复用能力
+const env = process.env;
+const outdir = env.npm_package_config_outdir;
+const flat = env.npm_package_config_flat;
 
 const build = {
   // 项目根目录路径
   rootPath: path.join(__dirname, "../"),
   // 构建目录路径
-  distPath: path.join(__dirname, "../", opts.outdir),
+  distPath: path.join(__dirname, "../", outdir),
 
   run() {
     // 清除构建目录
@@ -42,9 +35,8 @@ const build = {
 
   gulp() {
     // 构建参数
-    // --outdir: 构建目录
     // --color: 构建时打印带颜色的日志
-    shell.exec(`gulp --outdir=${opts.outdir} --color`, {
+    shell.exec(`gulp --color`, {
       // 构建同步执行
       async: false,
       // 构建失败则退出进程
@@ -54,7 +46,7 @@ const build = {
 
   flat() {
     // 如果没有平铺参数，则不进行平铺处理
-    if (!opts.flat) {
+    if (!flat) {
       return;
     }
 
@@ -180,18 +172,18 @@ const build = {
     });
   },
 
-  // 在项目根目录下使用 package.json 进行 NPM 发布，项目的引入路径为 import xxx from 'ziyi-sdk-demo/${opts.outdir}/xxx'
-  // 如果将 package.json 拷贝到 opts.outdir 目录下并进入 opts.outdir 目录进行发布，则引入路径为 import xxx from 'ziyi-sdk-demo/xxx'
+  // 在项目根目录下使用 package.json 进行 NPM 发布，项目的引入路径为 import xxx from 'ziyi-sdk-demo/${outdir}/xxx'
+  // 如果将 package.json 拷贝到 outdir 目录下并进入 outdir 目录进行发布，则引入路径为 import xxx from 'ziyi-sdk-demo/xxx'
   // 除此之外，天然解决了需要在 package.json 中配置 files 字段或者在项目目录中配置 .npmignore 的问题
   prepublish() {
-    // 拷贝 package.json 到 opts.outdir 目录下
+    // 拷贝 package.json 到 outdir 目录下
     // TIPS: 可以去除一些开发者不需要感知的开发态信息，例如 scripts、devDependencies
     fs.copyFileSync(
       path.join(this.rootPath, "package.json"),
       path.join(this.distPath, "package.json")
     );
 
-    // 拷贝 README.md 到 opts.outdir 目录下
+    // 拷贝 README.md 到 outdir 目录下
     fs.copyFileSync(
       path.join(this.rootPath, "README.md"),
       path.join(this.distPath, "README.md")

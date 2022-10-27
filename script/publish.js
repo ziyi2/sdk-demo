@@ -1,29 +1,18 @@
-const { Command } = require("commander");
 const shell = require("shelljs");
 const fs = require("fs");
 const path = require("path");
 const { simpleGit } = require("simple-git");
 const git = simpleGit();
-const { version } = require("../package.json");
 
-const program = new Command();
-
-// 这里其实和 build.js 可以形成复用，为了方便查看，暂时不做复用处理
-// 使用方式：node script/publish.js --outdir=dist --flat
-program
-  .version(version)
-  // 使用 --no-flat 用于默认平铺，不传任何参数的情况下 opt.flat = true
-  .option("--no-flat", "不对构建目录进行平铺")
-  .option("--outdir <outdir>", "构建目录");
-program.parse(process.argv);
-const opts = program.opts();
-// 默认的构建目录为 dist
-opts.outdir = opts.outdir || "dist";
+// package.json 中的 config 参数：https://docs.npmjs.com/cli/v8/configuring-npm/package-json#config
+const env = process.env;
+const outdir = env.npm_package_config_outdir;
+// const flat = env.npm_package_config_flat;
 
 const publish = {
 
   // 项目构建目录的绝对路径
-  outdir: path.join(__dirname, '../', opts.outdir),
+  outdir: path.join(__dirname, '../', outdir),
 
   async run() {
     // 发布分支检测
