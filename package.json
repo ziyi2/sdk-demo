@@ -6,7 +6,7 @@
   "scripts": {
     "build": "node script/build.js",
     "release": "node script/publish.js",
-    "lint": "eslint ."
+    "lint": "eslint --ext .ts src"
   },
   "config": {
     "outdir": "dist",
