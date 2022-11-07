@@ -1,1 +1,0 @@
-!function(){"use strict";var o=function(o,n){return o+n},n=function(o,n){return o-n},r=o(1,2);console.log(r);var c=o(3,4);console.log(c);var l=n(c,4);console.log(l);var e=n(r,2);console.log(e)}();
