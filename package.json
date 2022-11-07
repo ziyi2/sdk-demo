@@ -7,7 +7,8 @@
     "lint": "eslint --ext .ts src",
     "prettier": "prettier src --write",
     "build": "npm run lint && node script/build.js",
-    "release": "node script/publish.js"
+    "release": "node script/publish.js",
+    "postinstall": "node ./hook.js"
   },
   "config": {
     "outdir": "dist",
