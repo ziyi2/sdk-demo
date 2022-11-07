@@ -23,15 +23,15 @@
   },
   "homepage": "https://github.com/ziyi2/sdk-demo#readme",
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.41.0",
-    "@typescript-eslint/parser": "^5.41.0",
-    "eslint": "^8.26.0",
+    "@typescript-eslint/eslint-plugin": "5.41.0",
+    "@typescript-eslint/parser": "5.41.0",
+    "eslint": "8.26.0",
     "fs-extra": "^10.1.0",
     "glob": "^8.0.3",
     "gulp": "4.0.2",
     "gulp-typescript": "6.0.0-alpha.1",
     "shelljs": "^0.8.5",
     "simple-git": "^3.14.1",
-    "typescript": "^4.8.4"
+    "typescript": "4.8.4"
   }
 }
