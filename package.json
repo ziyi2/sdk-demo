@@ -4,7 +4,11 @@
   "description": "按需加载的 SDK 示例",
   "main": "index.js",
   "scripts": {
-    "build": "node script/build.js --outdir=dist"
+    "build": "node script/build.js"
+  },
+  "config": {
+    "outdir": "dist",
+    "flat": true
   },
   "repository": {
     "type": "git",
@@ -17,13 +21,12 @@
   },
   "homepage": "https://github.com/ziyi2/sdk-demo#readme",
   "devDependencies": {
-    "commander": "^9.4.1",
     "fs-extra": "^10.1.0",
     "glob": "^8.0.3",
-    "gulp": "^4.0.2",
-    "gulp-typescript": "^6.0.0-alpha.1",
+    "gulp": "4.0.2",
+    "gulp-typescript": "6.0.0-alpha.1",
     "minimist": "^1.2.7",
     "shelljs": "^0.8.5",
-    "typescript": "^4.8.4"
+    "typescript": "4.8.4"
   }
 }
