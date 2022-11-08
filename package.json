@@ -9,8 +9,7 @@
     "build": "npm run lint && node script/build.js",
     "release": "node script/publish.js",
     "prepare": "husky install",
-    "husky-add": "husky add",
-    "test": "echo \"放弃 commit 提交\" && exit 2"
+    "husky-add": "husky add"
   },
   "config": {
     "outdir": "dist",
