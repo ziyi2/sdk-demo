@@ -1,6 +1,9 @@
+.husky
+.vscode
 dist
 node_modules
 script
 .eslintrc.js
 .prettierrc.js
+.lintstagedrc.js
 gulpfile.js

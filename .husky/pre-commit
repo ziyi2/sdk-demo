@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-npm run lint
+# https://github.com/okonet/lint-staged#examples
+npx lint-staged
