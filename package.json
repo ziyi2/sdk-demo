@@ -8,7 +8,9 @@
     "prettier": "prettier src --write",
     "build": "npm run lint && node script/build.js",
     "release": "node script/publish.js",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "husky-add": "husky add",
+    "test": "echo \"放弃 commit 提交\" && exit 2"
   },
   "config": {
     "outdir": "dist",
